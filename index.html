@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Next Gen X402 Protocol</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Silkscreen&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+            pixel: ['Silkscreen', 'Courier New', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Hardware acceleration for smoother parallax */
+    #bg-container {
+      will-change: transform;
+    }
+  </style>
+</head>
+<body class="w-full h-screen bg-black overflow-hidden relative flex flex-col font-sans">
+
+  <div id="bg-container" class="absolute inset-0 w-full h-full origin-center" style="transform: scale(1.25);">
+    <img 
+      id="bg-image" 
+      alt="Background" 
+      class="w-full h-full object-cover object-bottom md:object-top pointer-events-none"
+    />
+  </div>
+
+  <nav class="absolute top-6 left-0 w-full px-4 md:px-[6%] flex items-center justify-between z-30 gap-4">
+    <div class="flex items-center gap-4 bg-[#383838]/80 backdrop-blur-md rounded-full p-2 pr-6 w-full max-w-[60vw] md:max-w-[700px] border border-white/20 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
+      <div class="w-10 h-10 md:w-11 md:h-11 rounded-full bg-[#d9d9d9] shrink-0"></div>
+      <span class="text-white font-bold text-lg md:text-xl tracking-wide">TST402</span>
+    </div>
+
+    <div class="flex items-center bg-[#383838]/80 backdrop-blur-md rounded-full p-1 border border-white/20 shadow-[0_4px_30px_rgba(0,0,0,0.5)] shrink-0">
+      <button class="bg-[#4461F2] hover:bg-[#3b55d9] transition text-white px-6 md:px-8 py-2 md:py-2.5 rounded-full text-sm font-medium cursor-pointer shadow-md">
+        Connect Wallet
+      </button>
+    </div>
+  </nav>
+
+  <div class="absolute top-32 md:top-44 left-4 md:left-[8%] z-20 pointer-events-none">
+    <h1 class="text-white text-4xl md:text-5xl lg:text-[4rem] xl:text-[4.5rem] font-sans font-medium leading-[1.1] tracking-tight drop-shadow-2xl">
+      Next gen X402<br />
+      Protocol <span class="font-pixel inline-block text-[0.9em] translate-y-1 md:translate-y-2">AI</span> Assistant
+    </h1>
+  </div>
+
+  <div class="absolute bottom-0 left-0 w-full md:left-[5%] lg:left-[10%] flex justify-center md:justify-start items-end pointer-events-none z-10">
+    <img 
+      id="char-image" 
+      alt="AI Assistant Character" 
+      class="w-auto h-[75vh] md:h-[95vh] max-h-[calc(100vh-18rem)] md:max-h-[calc(100vh-21rem)] lg:max-h-[calc(100vh-23rem)] max-w-[95vw] md:max-w-[55vw] lg:max-w-[50vw] object-contain object-bottom drop-shadow-[0_0_25px_rgba(0,0,0,0.5)]"
+    />
+  </div>
+
+  <script>
+    // =========================================================
+    // ⚙️ IMPORT SECTION: CHANGE YOUR IMAGE LINKS HERE
+    // =========================================================
+    const ASSETS = {
+      background: 'https://github.com/ReportforthisMonth/TST/blob/main/Group%201.png?raw=true',       // Replace with your background URL
+      character: 'https://github.com/ReportforthisMonth/TST/blob/main/0e11b6a6-3f08-4cfa-9ec1-81fcf006dda2%20copy%201.png?raw=true'  // Replace with your character URL
+    };
+
+    // Apply the imported images to the DOM
+    document.getElementById('bg-image').src = ASSETS.background;
+    document.getElementById('char-image').src = ASSETS.character;
+
+
+    // =========================================================
+    // 🖱️ PARALLAX MOVEMENT LOGIC (Replacing framer-motion)
+    // =========================================================
+    const bgContainer = document.getElementById('bg-container');
+    
+    // Target mouse positions
+    let targetX = 0;
+    let targetY = 0;
+    
+    // Current positions used for smooth interpolation (spring effect)
+    let currentX = 0;
+    let currentY = 0;
+
+    window.addEventListener('mousemove', (e) => {
+      const { innerWidth, innerHeight } = window;
+      // Calculate normalized mouse position (-1 to 1)
+      const x = (e.clientX / innerWidth) * 2 - 1;
+      const y = (e.clientY / innerHeight) * 2 - 1;
+      
+      // Move slightly opposite to mouse cursor (-35 factor from original React code)
+      targetX = x * -35;
+      targetY = y * -35;
+    });
+
+    // Animation loop to create the "damping/stiffness" smooth effect
+    function animateParallax() {
+      // Linear interpolation (lerp) for smoothness
+      currentX += (targetX - currentX) * 0.05;
+      currentY += (targetY - currentY) * 0.05;
+      
+      // Apply translation alongside the original 1.25 scale
+      bgContainer.style.transform = `translate(${currentX}px, ${currentY}px) scale(1.25)`;
+      
+      requestAnimationFrame(animateParallax);
+    }
+
+    // Start the animation loop
+    animateParallax();
+  </script>
+</body>
+</html>
